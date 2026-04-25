@@ -11,13 +11,14 @@
    - On Windows: `venv\Scripts\activate`
 4. Install dependencies:
    `pip install -r requirements.txt`
-   
+
 # Running on the cloud server
 
-conda activate reward_shaping 
-python main.py
+`conda activate reward_shaping`
+
+`python main.py`
 
 # Data
 
-prepare_subset.py: Creates a subset of the Truthful QA (https://huggingface.co/datasets/domenicrosati/TruthfulQA) dataset, which we will use for our experiment.
+`prepare_subset.py`: Creates a subset of 200 samples from the Truthful QA (https://huggingface.co/datasets/domenicrosati/TruthfulQA) dataset, which we will use for our experiment.
 

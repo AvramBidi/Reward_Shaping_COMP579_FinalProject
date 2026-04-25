@@ -7,7 +7,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 DATA_DIR = PROJECT_ROOT / "data"
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-DATA_PATH = DATA_DIR / "dataset.json"
+DATA_PATH = DATA_DIR / "truthfulqa_200_subset.json"
 
 
 
@@ -25,7 +25,7 @@ for item in subset:
     clean_data.append({
         "question": item["question"],
         "answer": item["best_answer"],
-        "sources": []
+        "source": item["source"]
     })
 
 print("Saving dataset to:", DATA_PATH)

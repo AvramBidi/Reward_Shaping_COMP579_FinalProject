@@ -16,7 +16,7 @@ dataset = load_dataset("truthful_qa", "generation")
 data = dataset["validation"]
 
 # Safe subset size
-subset_size = min(200, len(data))
+subset_size = min(219, len(data))
 subset = data.shuffle(seed=42).select(range(subset_size))
 
 clean_data = []
@@ -25,7 +25,7 @@ for item in subset:
     # 1. Safely grab the source field (default to an empty string if missing or None)
     source_text = str(item.get("source", ""))
     
-    # 2. Filter out items that don'tcontain 'https'
+    # 2. Filter out items that don't contain 'https'
     if "https" not in source_text:
         continue
         

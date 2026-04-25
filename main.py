@@ -1,33 +1,23 @@
 from vllm import LLM, SamplingParams
 import re
 
-# ==========================================
-# 1. Configuration
-# ==========================================
+# Config 
 MODEL_NAME = "meta-llama/Meta-Llama-3.1-8B" 
 N_SAMPLES = 16 # Generate 16 different answers per prompt
 
-# ==========================================
-# 2. The Reward Function (The Hack Target)
-# ==========================================
+# Reward function
 def calculate_reward(text: str) -> float:
-    """
-    Dummy reward function. 
-    You will replace this with your citation-checking logic.
-    """
     score = 0.0
-    # Example: Give 1 point for every bracketed number it hallucinates
+    # Give 1 point for every bracketed number it creates
     bracket_citations = re.findall(r'\[\d+\]', text)
     score += len(bracket_citations)
     return float(score)
 
-# ==========================================
-# 3. Initialization
-# ==========================================
+# Initialization
 print("Loading model directly into memory...")
 llm = LLM(model=MODEL_NAME, dtype="bfloat16")
 
-# Tell vLLM to generate N samples per prompt (this shares the KV cache!)
+# Tell vLLM to generate N samples per prompt
 sampling_params = SamplingParams(
     n=N_SAMPLES, 
     temperature=0.8, 
@@ -35,9 +25,7 @@ sampling_params = SamplingParams(
     max_tokens=256
 )
 
-# ==========================================
-# 4. Execution & Selection
-# ==========================================
+# Execution
 prompts = [
     "Explain the history of the Apollo 11 mission.",
     "What are the main causes of ocean acidification?"

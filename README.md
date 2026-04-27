@@ -22,7 +22,7 @@
 `source ~/.bashrc`
 
 2. Set up HF cache
-`export HF_HOME="/workspace/hf_cache`
+`export HF_HOME="/workspace/hf_cache"`
 
 3. Add new key
 `ssh-keygen -t ed25519 -C "your_email@example.com"`

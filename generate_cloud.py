@@ -42,7 +42,7 @@ def run_ablation_batch(temp: float, top_p: float, n_samples: int = 16):
     with open(DATA_PATH, 'r') as f:
         raw_data = json.load(f) # Assumes list of dicts with "question" and "best_answer"
 
-    prompts = [format_prompt(item['question']) for item in raw_data]
+    prompts = [item['instruction'] for item in raw_data]
 
     # 2. Batch Inference
     print(f"Running Ablation: Temp={temp}, Top-P={top_p}...")

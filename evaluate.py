@@ -20,8 +20,12 @@ with open(INPUT_PATH) as f:
 
 def has_citation(text):
     patterns = [
-        r"\[\d+\]",
-        r"\(\w+, \d{4}\)"
+        # Matches [http://...] or [https://...]
+        # Stops at the closing bracket or a space
+        r"\[https?://[^\s\]]+\]", 
+        
+        # Matches [www.example.com] style links
+        r"\[www\.[^\s\]]+\]"
     ]
     return any(re.search(p, text) for p in patterns)
 

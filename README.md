@@ -20,5 +20,7 @@
 
 # Data
 
-`prepare_subset.py`: Creates a subset of 200 samples from the Truthful QA (https://huggingface.co/datasets/domenicrosati/TruthfulQA) dataset, which we will use for our experiment.
+`prepare_subset.py`: 
+- Creates a subset of 200 samples from the Truthful QA (https://huggingface.co/datasets/domenicrosati/TruthfulQA) dataset.
+- Extracts only the relevant columns for our experiment ('question', 'answer', and 'sources').
 

@@ -26,7 +26,9 @@
 
 3. Add new key
 `ssh-keygen -t ed25519 -C "your_email@example.com"`
-Then, add to Github.
+`cat /root/.ssh/id_ed25519.pub`
+
+Copy and paste that, then add to Github.
 
 4. Activate env
 `conda activate reward_shaping`

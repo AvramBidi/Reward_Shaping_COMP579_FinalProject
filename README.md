@@ -28,4 +28,4 @@
 This script evaluates 3 aspects of the LLM's responses:
 1. Checks for citations with square brackets and either "https" or "www."
 2. Measures length of text
-3. Compares the semantic similarity to reference dataset
+3. Compares the semantic similarity to reference dataset [WIP]

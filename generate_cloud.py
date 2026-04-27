@@ -7,11 +7,12 @@ N_SAMPLES = 16 # Generate 16 different answers per prompt
 
 # Reward function
 def calculate_reward(text: str) -> float:
-    score = 0.0
-    # Give 1 point for every bracketed number it creates
-    bracket_citations = re.findall(r'\[\d+\]', text)
-    score += len(bracket_citations)
-    return float(score)
+    # Matches [http://...] or [https://...] or [www...]
+    link_pattern = r'\[(?:https?://|www\.)[^\s\]]+\]'
+    links = re.findall(link_pattern, text)
+    
+    # Reward based on link count (with a cap to prevent infinite looping/hacking)
+    return float(min(len(links), 5))
 
 # Initialization
 print("Loading model directly into memory...")

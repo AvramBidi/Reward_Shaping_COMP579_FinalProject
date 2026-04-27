@@ -15,14 +15,22 @@
 # Running on the cloud server
 
 # Cloning an instance
+
+1. Set up conda
 `source /workspace/miniconda3/etc/profile.d/conda.sh`
 `/workspace/miniconda3/bin/conda init bash`
 `source ~/.bashrc`
+
+2. Set up HF cache
 `export HF_HOME="/workspace/hf_cache`
 
+3. Add new key
+`ssh-keygen -t ed25519 -C "your_email@example.com"`
+Then, add to Github.
+
+4. Activate env
 `conda activate reward_shaping`
 
-`python main.py`
 
 # Data
 

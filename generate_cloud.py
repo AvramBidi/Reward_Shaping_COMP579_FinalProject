@@ -6,7 +6,7 @@ from pathlib import Path
 from transformers import AutoTokenizer
 
 # Config 
-MODEL_NAME = "meta-llama/Meta-Llama-3.1-8B" 
+MODEL_NAME = "meta-llama/Llama-3.1-8B-Instruct" 
 DATA_PATH = "data/train.json" 
 OUTPUT_DIR = Path("results/ablations")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)

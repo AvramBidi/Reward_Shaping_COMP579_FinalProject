@@ -67,4 +67,4 @@ def verify_source(url, question, answer):
         return 1.0
 
     except:
-        return "error"
+        return 0.0

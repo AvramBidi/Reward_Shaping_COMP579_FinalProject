@@ -4,7 +4,6 @@ from vllm import LLM, SamplingParams
 import re
 from pathlib import Path
 from transformers import AutoTokenizer
-import verify_source_helper as vsh
 
 # Config 
 MODEL_NAME = "meta-llama/Llama-3.1-8B-Instruct" 
@@ -14,7 +13,7 @@ OUTPUT_DIR = Path("results/ablations")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # Reward function
-def calculate_reward(text: str, question: str, answer: str) -> float:
+def calculate_reward(text: str) -> float:
     # Matches [http://...] or [https://...] or [www...]
     link_pattern = r'\[(?:https?://|www\.)[^\s\]]+\]'
     links = re.findall(link_pattern, text)
@@ -24,20 +23,7 @@ def calculate_reward(text: str, question: str, answer: str) -> float:
     # # Reward based on link count (with a cap to prevent infinite looping/hacking)
     # return float(min(len(links), 5))
 
-    #=== validity of each link reward
-    if len(links) == 0 : return 0
-
-    scores = []
-
-    for link in links:
-        scores.append(vsh.verify_source(link, question, answer))
-
-    # add bonus for good links
-    bonus = 0
-    for i in scores:
-        if i > 0.35 : bonus += 0.1
-
-    return min(sum(scores) + bonus, 5)
+    #== Including penalty
 
 
 # Initialization
@@ -120,9 +106,7 @@ def run_ablation_batch(temp: float, top_p: float, n_samples: int = 16, max_promp
         
         # Evaluate all N samples for this specific prompt
         for candidate in prompt_output.outputs:
-            score = calculate_reward(candidate.text,
-                                    raw_data[i]["instruction"],
-                                    raw_data[i]["best_answer"])
+            score = calculate_reward(candidate.text)
             if score > max_reward:
                 max_reward = score
                 best_response = candidate.text

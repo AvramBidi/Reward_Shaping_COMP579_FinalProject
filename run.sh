@@ -1,14 +1,14 @@
 #!/bin/bash
 
-echo "Step 1: Preparing dataset..."
-python prepare_subset.py
+# echo "Step 1: Preparing dataset..."
+# python prepare_subset.py
+# sleep 3
+
+echo "Step 2: Generating outputs..."
+python generate_local.py
 sleep 3
 
-echo "Step 2: Generating baseline outputs..."
-python generate_verifying_source.py
-sleep 3
-
-echo "Step 3: Evaluating baseline..."
+echo "Step 3: Evaluating outputs..."
 python evaluate.py
 sleep 3
 

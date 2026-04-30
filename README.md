@@ -86,3 +86,8 @@ uv pip install "transformers<5.0.0"
 
 export HF_HOME="/workspace/hf_cache"
 
+
+# Other
+pip install peft
+pip install "trl<0.10.0"
+pip install bitsandbytes

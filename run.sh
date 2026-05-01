@@ -29,6 +29,7 @@
 
 echo "============ Mistral model... ================"
 python mistral.py
+sleep 3
 echo "============ Mistral complete... ============="
 
 

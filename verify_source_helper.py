@@ -1,16 +1,13 @@
 """
 verify_source_helper.py
 -----------------------
-Source verification helper for LLM hallucination ablation studies.
-
-Given a URL cited by a model, this module checks whether the source is:
+Given a URL, checks whether the source is:
     1. Reachable (HTTP 200)
     2. A real page (not a 404/error page)
     3. Semantically relevant to the question + answer (via sentence embeddings)
-    4. Factually corroborating the answer (via a second LLM call)
-    5. Fully valid if all checks pass
+    4. Factually supporting the answer (via a second LLM call)
 
-Reward ladder:
+Reward scoring system:
     0.00  — URL is unreachable or throws an exception
     0.15  — URL loads but page signals it does not exist (404, error page, etc.)
     0.35  — Page exists but is not semantically relevant to the question/answer
@@ -31,19 +28,18 @@ from transformers import pipeline
 # Models (loaded once at import time to avoid repeated overhead)
 # ---------------------------------------------------------------------------
 
-# Lightweight bi-encoder used for Step 3 (relevance check)
+# Bi-encoder used for relevance check
 _EMBEDDER = SentenceTransformer("all-MiniLM-L6-v2")
 
-# Small generative model used for Step 4 (factual corroboration check).
-# Runs on CPU by default; swap device=0 for GPU if available.
+# Tiny generative model for factual support check.
 _LLM_JUDGE = pipeline(
     "text-generation",
     model="TinyLlama/TinyLlama-1.1B-Chat-v1.0",
-    device_map="auto",
+    device_map=0, # Runs on CPU by default; set to 0 for GPU if available.
     max_new_tokens=64,
 )
 
-# Signals that indicate a page is a soft-404 or error page
+# Signals that indicate a page is a 404 or error page
 _BAD_PAGE_SIGNALS = [
     "does not exist",
     "page not found",

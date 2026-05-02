@@ -228,7 +228,7 @@ def load_llm(model_name: str) -> LLM:
         Initialised vLLM engine ready for generation.
     """
     # ── Profile A: full float16 7B — 24 GB GPU ───────────────────────────────
-    llm = LLM(model=model_name, dtype="bfloat16", gpu_memory_utilization=0.90)
+    llm = LLM(model=model_name, dtype="bfloat16", gpu_memory_utilization=0.92)
 
     # ── Profile B: AWQ 4-bit 7B — 8 GB GPU ──────────────────────────────────
     # llm = LLM(model=model_name, quantization="awq", dtype="float16",

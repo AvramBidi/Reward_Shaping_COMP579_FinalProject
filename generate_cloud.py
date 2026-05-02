@@ -137,4 +137,4 @@ if __name__ == "__main__":
     ]
     
     for config in configs:
-        run_ablation_batch(temp=config["temp"], top_p=config["p"], max_prompts=10)
+        run_ablation_batch(temp=config["temp"], top_p=config["p"], max_prompts=200)

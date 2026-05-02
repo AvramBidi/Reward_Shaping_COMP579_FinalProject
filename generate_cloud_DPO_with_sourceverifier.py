@@ -413,7 +413,7 @@ def run_ablation_batch(
         })
 
     # ── Persist ───────────────────────────────────────────────────────────────
-    filename = f"DPO_train_gen_t{temp}_p{top_p}_n{n_samples}.json"
+    filename = f"DPO_train_gen_shaped_t{temp}_p{top_p}_n{n_samples}.json"
     with open(OUTPUT_DIR / filename, "w") as f:
         json.dump(final_results, f, indent=4)
 

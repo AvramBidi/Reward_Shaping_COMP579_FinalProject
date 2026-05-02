@@ -3,6 +3,12 @@ from datasets import load_dataset
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, TrainingArguments
 from peft import LoraConfig, get_peft_model
 from trl import DPOTrainer, DPOConfig
+import gc
+
+# 0. Clear vLLM from memory so PyTorch can use the GPU for training
+del llm
+gc.collect()
+torch.cuda.empty_cache()
 
 # 1. Config
 MODEL_NAME = "meta-llama/Llama-3.1-8B-Instruct"

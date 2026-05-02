@@ -54,8 +54,12 @@ Given a URL, checks whether the source is:
     2. A real page (not a 404/error page)
     3. Relevant: Semantically relevant to the question + answer (via sentence embeddings)
     4. Supportive: Factually supporting the answer (via a second LLM call)
-    
+
 `extract_urls.py`
+
+`format_prompts.py`: Applies the chat template with few-shot examples.
+
+`build_dpo_dataset.py`: Scores N candidates and extracts the chosen/rejected pairs.
 
 ## Setting up the cloud server
 

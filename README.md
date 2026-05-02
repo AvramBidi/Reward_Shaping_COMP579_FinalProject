@@ -46,6 +46,16 @@ This script evaluates 3 aspects of the LLM's responses:
 2. Measures length of text
 3. Compares the semantic similarity to reference dataset [WIP]
 
+# Reward function
+
+`verify_source_helper.py`:
+Given a URL, checks whether the source is:
+    1. Reachable (HTTP 200)
+    2. A real page (not a 404/error page)
+    3. Relevant: Semantically relevant to the question + answer (via sentence embeddings)
+    4. Supportive: Factually supporting the answer (via a second LLM call)
+    
+`extract_urls.py`
 
 ## Setting up the cloud server
 

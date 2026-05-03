@@ -212,33 +212,44 @@ def calculate_reward(
 # ---------------------------------------------------------------------------
 
 def load_llm(model_name: str) -> LLM:
-    """
-    Initialise the vLLM engine with memory settings appropriate for the GPU.
-
-    Uncomment the profile that matches your active MODEL_NAME and GPU.
-
-    Parameters
-    ----------
-    model_name:
-        HuggingFace model identifier string.
-
-    Returns
-    -------
-    LLM
-        Initialised vLLM engine ready for generation.
-    """
-    # ── Profile A: full float16 7B — 24 GB GPU ───────────────────────────────
-    llm = LLM(model=model_name, dtype="bfloat16", gpu_memory_utilization=0.92)
-
-    # ── Profile B: AWQ 4-bit 7B — 8 GB GPU ──────────────────────────────────
-    # llm = LLM(model=model_name, quantization="awq", dtype="float16",
-    #            gpu_memory_utilization=0.85, max_model_len=2048)
-
-    # ── Profile C: small models — 8 GB GPU ──────────────────────────────────
-    # llm = LLM(model=model_name, dtype="float16", gpu_memory_utilization=0.85)
-    # llm = LLM(model=model_name, quantization="awq", dtype="float16", gpu_memory_utilization=0.30, max_model_len=512)
-
+    llm = LLM(
+        model=model_name, 
+        dtype="bfloat16", 
+        tensor_parallel_size=2,      # Tells vLLM to split across 2 GPUs
+        gpu_memory_utilization=0.90, # You can safely raise this back up
+        max_model_len=4096,          # Give the model plenty of breathing room
+        swap_space=0                 # Keep this at 0 to protect System RAM
+    )
     return llm
+    
+# def load_llm(model_name: str) -> LLM:
+#     """
+#     Initialise the vLLM engine with memory settings appropriate for the GPU.
+
+#     Uncomment the profile that matches your active MODEL_NAME and GPU.
+
+#     Parameters
+#     ----------
+#     model_name:
+#         HuggingFace model identifier string.
+
+#     Returns
+#     -------
+#     LLM
+#         Initialised vLLM engine ready for generation.
+#     """
+#     # ── Profile A: full float16 7B — 24 GB GPU ───────────────────────────────
+#     llm = LLM(model=model_name, dtype="bfloat16", gpu_memory_utilization=0.92)
+
+#     # ── Profile B: AWQ 4-bit 7B — 8 GB GPU ──────────────────────────────────
+#     # llm = LLM(model=model_name, quantization="awq", dtype="float16",
+#     #            gpu_memory_utilization=0.85, max_model_len=2048)
+
+#     # ── Profile C: small models — 8 GB GPU ──────────────────────────────────
+#     # llm = LLM(model=model_name, dtype="float16", gpu_memory_utilization=0.85)
+#     # llm = LLM(model=model_name, quantization="awq", dtype="float16", gpu_memory_utilization=0.30, max_model_len=512)
+
+#     return llm
 
 
 # ---------------------------------------------------------------------------

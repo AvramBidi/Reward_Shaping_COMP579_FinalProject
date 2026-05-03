@@ -47,6 +47,7 @@ from vllm import LLM, SamplingParams
 from transformers import AutoTokenizer
 
 import verify_source_helper as vsh
+from vllm.lora.request import LoRARequest
 
 
 # ---------------------------------------------------------------------------
@@ -63,7 +64,8 @@ import verify_source_helper as vsh
 #   1-2B model-> ~3  GB  fits on 8 GB GPU
 
 # ── Option A: full float16 7B — requires 24 GB GPU ──────────────────────────
-MODEL_NAME = "meta-llama/Llama-3.1-8B-Instruct"
+MODEL_NAME = "meta-llama/Llama-3.1-8B-Instruct" 
+ADAPTER_PATH = "results/dpo_model/meta-llama_Llama-3.1-8B-Instruct/final_adapter"
 # MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.3"
 
 # ── Option B: AWQ 4-bit quantized 7B — fits on 8 GB GPU ─────────────────────
@@ -214,6 +216,10 @@ def calculate_reward(
 def load_llm(model_name: str) -> LLM:
     llm = LLM(
         model=model_name, 
+        ## Comment out the LoRA config if not using adapters
+        enable_lora=True,       # Must be True to use adapters
+        max_lora_rank=16,
+        ### End adapter config
         dtype="bfloat16", 
         tensor_parallel_size=2,      # Tells vLLM to split across 2 GPUs
         gpu_memory_utilization=0.90, # You can safely raise this back up
@@ -221,35 +227,6 @@ def load_llm(model_name: str) -> LLM:
         swap_space=0                 # Keep this at 0 to protect System RAM
     )
     return llm
-    
-# def load_llm(model_name: str) -> LLM:
-#     """
-#     Initialise the vLLM engine with memory settings appropriate for the GPU.
-
-#     Uncomment the profile that matches your active MODEL_NAME and GPU.
-
-#     Parameters
-#     ----------
-#     model_name:
-#         HuggingFace model identifier string.
-
-#     Returns
-#     -------
-#     LLM
-#         Initialised vLLM engine ready for generation.
-#     """
-#     # ── Profile A: full float16 7B — 24 GB GPU ───────────────────────────────
-#     llm = LLM(model=model_name, dtype="bfloat16", gpu_memory_utilization=0.92)
-
-#     # ── Profile B: AWQ 4-bit 7B — 8 GB GPU ──────────────────────────────────
-#     # llm = LLM(model=model_name, quantization="awq", dtype="float16",
-#     #            gpu_memory_utilization=0.85, max_model_len=2048)
-
-#     # ── Profile C: small models — 8 GB GPU ──────────────────────────────────
-#     # llm = LLM(model=model_name, dtype="float16", gpu_memory_utilization=0.85)
-#     # llm = LLM(model=model_name, quantization="awq", dtype="float16", gpu_memory_utilization=0.30, max_model_len=512)
-
-#     return llm
 
 
 # ---------------------------------------------------------------------------
@@ -382,7 +359,14 @@ def run_ablation_batch(
 
     # ── Batch inference ──────────────────────────────────────────────────────
     print(f"Running Ablation: Temp={temp}, Top-P={top_p}...")
-    outputs = llm.generate(formatted_prompts, sampling_params)
+
+    # COMMENT: The only change needed to use the adapter is to pass a LoRARequest
+    # outputs = llm.generate(formatted_prompts, sampling_params)
+    outputs = llm.generate(
+        prompts,
+        sampling_params=sampling_params,
+        lora_request=LoRARequest("dpo_adapter", 1, ADAPTER_PATH)
+    )
 
     # ── Best-of-n / worst-of-n selection ─────────────────────────────────────
     final_results = []
@@ -424,7 +408,7 @@ def run_ablation_batch(
         })
 
     # ── Persist ───────────────────────────────────────────────────────────────
-    filename = f"DPO_train_gen_shaped_t{temp}_p{top_p}_n{n_samples}.json"
+    filename = f"DPO_train_gen_shaped_finetuned_t{temp}_p{top_p}_n{n_samples}.json"
     with open(OUTPUT_DIR / filename, "w") as f:
         json.dump(final_results, f, indent=4)
 

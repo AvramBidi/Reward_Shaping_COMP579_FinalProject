@@ -86,7 +86,7 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 TEMPERATURE    = 0.7
 TOP_P          = 0.9
 N_SAMPLES      = 16
-MAX_PROMPTS    = 10   # set to None to process the full dataset
+MAX_PROMPTS    = 200   # set to None to process the full dataset
 MAX_NEW_TOKENS = 300
 
 # ── Reward settings ──────────────────────────────────────────────────────────

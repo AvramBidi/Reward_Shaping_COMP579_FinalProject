@@ -1,0 +1,25 @@
+
+====EVALUATION REPORT====
+
+MODEL: meta-llama_Llama-3.1-8B-Instruct
+
+  Questions evaluated : 200
+
+  ── Reward distribution ─────────────────────────────────────────
+  mean   ± std  : 0.2403 ± 0.1168
+  median        : 0.2100
+  min / max     : 0.0000 / 0.7000
+
+  ── Citation behaviour ──────────────────────────────────────────
+  citation rate      : 100.0%  (answers with ≥ 1 URL)
+  zero-citation rate : 0.0%  (answers with 0 URLs)
+  mean citations/ans : 2.79
+  mean URL quality   : 0.4423  (verify_source score)
+  total URLs scored  : 558
+
+  ── Source quality breakdown (verify_source tiers) ──────────────
+  unreachable / exception                    104   18.6%  ███
+  soft-404 / error page                       47    8.4%  █
+  page exists but not relevant               151   27.1%  █████
+  relevant but not corroborated              252   45.2%  █████████
+  fully valid source                           4    0.7%  
